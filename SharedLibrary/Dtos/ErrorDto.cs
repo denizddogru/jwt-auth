@@ -3,22 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace SharedLibrary;
+namespace SharedLibrary.Dtos;
 
 // Tüm API'larda hata yakalanan kısım burası olacak
 public class ErrorDto
 {
-    
+
     // Private set: Özelliğin sadece sınıfın iççinden ayarlanabilmesini sağlar.
-    public  List<String> Errors { get; private set; }
+    public List<string> Errors { get; private set; }
 
     public bool IsShow { get; private set; }
 
 
     public ErrorDto()
     {
-        Errors  = new List<String>();
+        Errors = new List<string>();
     }
 
     public ErrorDto(string error, bool isShow)
@@ -27,12 +28,10 @@ public class ErrorDto
         isShow = true;
     }
 
-    public ErrorDto(List<String> errors, bool isShow)
+    public ErrorDto(List<string> errors, bool isShow)
     {
         Errors = Errors;
         IsShow = isShow;
     }
-
-
 
 }
