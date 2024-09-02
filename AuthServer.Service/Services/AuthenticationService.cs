@@ -85,9 +85,28 @@ public class AuthenticationService : IAuthenticationService
         return Response<ClientTokenDto>.Success(200);
     }
 
-    public Response<TokenDto> CreateTokenByRefreshTokenAsync(string refreshToken)
+    public async Task<Response<TokenDto>> CreateTokenByRefreshTokenAsync(string refreshToken)
     {
-        throw new NotImplementedException();
+
+        var existingRefreshToken = await _userRefreshTokenService.Where(x => x.RefreshToken == refreshToken).SingleOrDefaultAsync();
+
+        if(existingRefreshToken==null)
+        {
+            return Response<TokenDto>.Fail("Refresh Token not found", 404,true);
+        }
+
+        var user = await _userManager.FindByIdAsync(existingRefreshToken.UserId);
+
+        if(user==null) {  return Response<TokenDto>.Fail("User not fonud",404, true); } 
+
+        var tokenDto = _tokenService.CreateToken(user);
+
+        existingRefreshToken.RefreshToken = tokenDto.RefreshToken;
+        existingRefreshToken.ExpirationDate = tokenDto.RefreshTokenExpirationDate;
+
+        await _unitOfWork.CommitAsync();
+
+        return Response<TokenDto>.Success(tokenDto, 200);
     }
 
     public Task<Response<NoDataDto>> RevokeRefreshToken(string refreshToken)

@@ -12,7 +12,7 @@ public interface IAuthenticationService
 
     Task<Response<TokenDto>> CreateTokenAsync(LoginDto loginDto);
 
-    Response<TokenDto> CreateTokenByRefreshTokenAsync(string refreshToken);
+    Task<Response<TokenDto>> CreateTokenByRefreshTokenAsync(string refreshToken);
 
     Task<Response<NoDataDto>> RevokeRefreshToken(string refreshToken);
 
