@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AuthServer.Core.Configuration;
+﻿namespace AuthServer.Core.Configuration;
 
 // Auth servera istek yapıcak client'a karşılık gelecek ,web app de olabilir mobil app de
 public class Client

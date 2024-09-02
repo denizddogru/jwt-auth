@@ -32,7 +32,7 @@ public class AuthenticationService : IAuthenticationService
     }
 
 
-    public async Task<Response<TokenDto>> CreateTokenAsync(LoginDto loginDto)
+    public Response<TokenDto> CreateTokenAsync(LoginDto loginDto)
     {
         if(loginDto==null)
             throw new ArgumentNullException(nameof(loginDto));
@@ -49,7 +49,9 @@ public class AuthenticationService : IAuthenticationService
         }
 
         var token = _tokenService.CreateToken(user);
-        var userRefreshToken = await _userRefreshTokenService.Where(x => x.UserId == user.Id).SingleOrDefaultAsync();
+
+        var userRefreshToken = await _userRefreshTokenService.Where
+            (x => x.UserId == user.Id).SingleOrDefaultAsync();
 
         if(userRefreshToken != null)
         {
@@ -57,16 +59,33 @@ public class AuthenticationService : IAuthenticationService
                 UserId =user.Id, RefreshToken=token.RefreshToken,
                 ExpirationDate=token.RefreshTokenExpirationDate });
         }
+        else
+        {
+            userRefreshToken.RefreshToken=token.RefreshToken;
+            userRefreshToken.ExpirationDate = token.RefreshTokenExpirationDate;
 
+        }
+
+        await _unitOfWork.CommitAsync();
+
+        return Response<TokenDto>.Success(200);
 
     }
 
-    public Task<Response<ClientTokenDto>> CreateTokenByClient(ClientLoginDto loginDto)
+    public Response<ClientTokenDto> CreateTokenByClient(ClientLoginDto clientLoginDto)
     {
-        throw new NotImplementedException();
+        var client = _clients.SingleOrDefault(x => x.Id == clientLoginDto.ClientId && x.Secret == clientLoginDto.ClientSecret);
+
+        if(client==null)
+        {
+            return Response<ClientTokenDto>.Fail("ClientId or ClientSecret not found", 404, true);
+        }
+
+        var token = _tokenService.CreateTokenByClient(client);
+        return Response<ClientTokenDto>.Success(200);
     }
 
-    public Task<Response<TokenDto>> CreateTokenByRefreshTokenAsync(string refreshToken)
+    public Response<TokenDto> CreateTokenByRefreshTokenAsync(string refreshToken)
     {
         throw new NotImplementedException();
     }
