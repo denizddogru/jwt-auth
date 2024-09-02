@@ -7,6 +7,7 @@ namespace AuthServer.Service;
 {
     public DtoMapper() 
     {
+        //  ProductDto nesnesini Produt nesnesine dönüştürmek için harita oluşturulur.
         CreateMap<ProductDto, Product>().ReverseMap();
         CreateMap<UserAppDto, AppUser>().ReverseMap();
     }
