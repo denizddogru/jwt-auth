@@ -109,8 +109,20 @@ public class AuthenticationService : IAuthenticationService
         return Response<TokenDto>.Success(tokenDto, 200);
     }
 
-    public Task<Response<NoDataDto>> RevokeRefreshToken(string refreshToken)
+    public async Task<Response<NoDataDto>> RevokeRefreshToken(string refreshToken)
     {
-        throw new NotImplementedException();
+        var revokeRefreshToken = await _userRefreshTokenService.Where(x => x.RefreshToken == refreshToken).SingleOrDefaultAsync();
+       
+        if (revokeRefreshToken==null)
+        {
+            return Response<NoDataDto>.Fail("RefreshToken not found", 404, true);
+        }
+
+        _userRefreshTokenService.Remove(revokeRefreshToken);
+
+        await _unitOfWork.CommitAsync();
+
+        return Response<NoDataDto>.Success(200);
+
     }
 }
