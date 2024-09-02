@@ -5,6 +5,7 @@ using AuthServer.Core.Repositories;
 using AuthServer.Core.Services;
 using AuthServer.Core.UnitOfWork;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using SharedLibrary.Dtos;
 
@@ -31,9 +32,33 @@ public class AuthenticationService : IAuthenticationService
     }
 
 
-    public Task<Response<TokenDto>> CreateTokenAsync(LoginDto loginDto)
+    public async Task<Response<TokenDto>> CreateTokenAsync(LoginDto loginDto)
     {
-        throw new NotImplementedException();
+        if(loginDto==null)
+            throw new ArgumentNullException(nameof(loginDto));
+
+        var user = await _userManager.FindByEmailAsync(loginDto.Email);
+
+        if (user == null)
+            return Response<TokenDto>.Fail("Email or Password incorrect", 400, true);
+
+        if(!await _userManager.CheckPasswordAsync(user, loginDto.Password))
+        {
+            return Response<TokenDto>.Fail("Email or Password incorrect", 400, true);
+
+        }
+
+        var token = _tokenService.CreateToken(user);
+        var userRefreshToken = await _userRefreshTokenService.Where(x => x.UserId == user.Id).SingleOrDefaultAsync();
+
+        if(userRefreshToken != null)
+        {
+            await _userRefreshTokenService.AddAsync(new UserRefreshToken { 
+                UserId =user.Id, RefreshToken=token.RefreshToken,
+                ExpirationDate=token.RefreshTokenExpirationDate });
+        }
+
+
     }
 
     public Task<Response<ClientTokenDto>> CreateTokenByClient(ClientLoginDto loginDto)
