@@ -22,6 +22,8 @@ public class TokenService : ITokenService
         _tokenOptions = tokenOptions.Value;
     }
 
+    // part 1:
+    // 32-bytelık random bir string ürettik.
     private string CreateRefreshToken()
     {
         var numberByte = new Byte[32];
@@ -32,8 +34,7 @@ public class TokenService : ITokenService
 
         return Convert.ToBase64String(numberByte);
 
-        // part 1:
-        // 32-bytelık random bir string ürettik.
+
     }
 
     // part 2: Claim nesneleri oluşturuyoruz.
@@ -54,6 +55,18 @@ public class TokenService : ITokenService
 
         userList.AddRange(audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
         return userList;
+    }
+
+    // part 3: Üyelik sistemi gerektirmeyen bir token oluşturmak istediğimizde bu servisi kullanacağız.
+
+    private IEnumerable<Claim> GetClaimsByClient(Client client)
+    {
+        var claims = new List<Claim>();
+        claims.AddRange(client.Audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString());
+        new Claim(JwtRegisteredClaimNames.Sub, client.Id.ToString());
+
+        return claims;
     }
 
 

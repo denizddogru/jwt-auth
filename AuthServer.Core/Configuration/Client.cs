@@ -15,6 +15,6 @@ public class Client
 
     // Göndereceğim tokende hangi API'lere erişebilsin bilgileri tutulurç
     // www.myapi1.com, www.myapi2.com
-    public List<String> Audience { get; set; }
+    public List<string> Audiences { get; set; }
 
 }
