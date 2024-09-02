@@ -5,7 +5,7 @@ namespace AuthServer.Core.Services;
 
 // Dto'nun ve Entity'nin tipinin bir class olduğunu declere ediyoruz.
 // Entityleri Dto'ya cast ettik
-public interface IServiceGeneric<TEntity,TDto> where TEntity : class where TDto : class
+public interface IGenericService<TEntity,TDto> where TEntity : class where TDto : class
 {
     Task<Response<TDto>> GetByIdAsync(int id);
     Task<Response<IEnumerable<TDto>>> GetAllAsync();
