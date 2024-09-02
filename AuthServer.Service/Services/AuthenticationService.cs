@@ -32,7 +32,7 @@ public class AuthenticationService : IAuthenticationService
     }
 
 
-    public Response<TokenDto> CreateTokenAsync(LoginDto loginDto)
+    public async Task<Response<TokenDto>> CreateTokenAsync(LoginDto loginDto)
     {
         if(loginDto==null)
             throw new ArgumentNullException(nameof(loginDto));
