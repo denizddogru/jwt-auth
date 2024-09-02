@@ -5,10 +5,13 @@ using AuthServer.Core.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
 using SharedLibrary.Configurations;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
 namespace AuthServer.Service.Services;
 public class TokenService : ITokenService
@@ -58,7 +61,6 @@ public class TokenService : ITokenService
     }
 
     // part 3: Üyelik sistemi gerektirmeyen bir token oluşturmak istediğimizde bu servisi kullanacağız.
-
     private IEnumerable<Claim> GetClaimsByClient(Client client)
     {
         var claims = new List<Claim>();
@@ -69,12 +71,38 @@ public class TokenService : ITokenService
         return claims;
     }
 
-
+    // part 4:
     public TokenDto CreateToken(AppUser appUser)
     {
-        throw new NotImplementedException();
+        var accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration);
+        var refreshTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.RefreshTokenExpiration);
+
+        var securityKey = SignService.GetSymmetricSecurityKey(_tokenOptions.SecurityKey);
+
+        SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+
+        JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
+            issuer: _tokenOptions.Issuer,
+            expires: accessTokenExpiration,
+            notBefore: DateTime.Now,
+            claims: GetClaim(appUser, _tokenOptions.Audience),
+            signingCredentials: signingCredentials);
+
+        var handler = new JwtSecurityTokenHandler();
+
+        var token = handler.WriteToken(jwtSecurityToken);
+
+        var tokenDto = new TokenDto
+        {
+            AccessToken = token,
+            RefreshToken = CreateRefreshToken(),
+            AccessTokenExpirationDate = accessTokenExpiration,
+            RefreshTokenExpirationDate = refreshTokenExpiration,
+        };
+
+        return tokenDto;
     }
-    
+
     public ClientTokenDto CreateTokenByClient(Client client)
     {
         throw new NotImplementedException();
