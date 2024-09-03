@@ -19,7 +19,7 @@ namespace AuthServer.Service.Services;
 // bu şekilde A'nın ( yani bizim API ) private anahtarı hiçbir zaman B'ye açıklanmaz.
 
 
-internal static class SignService
+public static class SignService
 {
     public static SecurityKey GetSymmetricSecurityKey(string securityKey)
     {
