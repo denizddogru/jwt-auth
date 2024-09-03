@@ -71,10 +71,25 @@ internal class Program
 
             opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
             {
-                ValidIssuer = tokenOptions.Issuer,
-                ValidAudience
+                // 1: Benim göndermiþ olduðum issue mu onu kontrol ediyorum
+                // 2: appsettingsdeki TokenOptions Audience gerçekten doðru adresten mi geliyor ( audience )
+                // 3: Ardýndan issuer ve lifetime'ýný kontrol ediyoruz.
 
-            }
+                // ClockSkew: Farklý timezonelar , farklý serverlara kurulmuþ API'lar arasýnda token ömrüne default 5 dk ekler. 
+                // Biz  ayný serverda ayný anda çalýþssýn diye default deðeri kaldýrýp 0'ya çektik.(test amaçlý)
+
+                ValidIssuer = tokenOptions.Issuer,
+                ValidAudience = tokenOptions.Audience[0],
+                IssuerSigningKey = SignService.GetSymmetricSecurityKey(tokenOptions.SecurityKey),
+
+                ValidateIssuerSigningKey = true,
+                ValidateAudience = true,
+                ValidateIssuer = true,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+
+
+            };
 
         });
 
