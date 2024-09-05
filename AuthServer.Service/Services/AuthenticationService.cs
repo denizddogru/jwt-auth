@@ -32,45 +32,38 @@ public class AuthenticationService : IAuthenticationService
     }
 
 
+
     public async Task<Response<TokenDto>> CreateTokenAsync(LoginDto loginDto)
     {
-        if(loginDto==null)
-            throw new ArgumentNullException(nameof(loginDto));
+        if (loginDto == null) throw new ArgumentNullException(nameof(loginDto));
 
         var user = await _userManager.FindByEmailAsync(loginDto.Email);
 
-        if (user == null)
-            return Response<TokenDto>.Fail("Email or Password incorrect", 400, true);
+        if (user == null) return Response<TokenDto>.Fail("Email or Password is wrong", 400, true);
 
-        if(!await _userManager.CheckPasswordAsync(user, loginDto.Password))
+        if (!await _userManager.CheckPasswordAsync(user, loginDto.Password))
         {
-            return Response<TokenDto>.Fail("Email or Password incorrect", 400, true);
-
+            return Response<TokenDto>.Fail("Email or Password is wrong", 400, true);
         }
-
         var token = _tokenService.CreateToken(user);
 
-        var userRefreshToken = await _userRefreshTokenService.Where
-            (x => x.UserId == user.Id).SingleOrDefaultAsync();
+        var userRefreshToken = await _userRefreshTokenService.Where(x => x.UserId == user.Id).SingleOrDefaultAsync();
 
-        if(userRefreshToken != null)
+        if (userRefreshToken == null)
         {
-            await _userRefreshTokenService.AddAsync(new UserRefreshToken { 
-                UserId =user.Id, RefreshToken=token.RefreshToken,
-                ExpirationDate=token.RefreshTokenExpirationDate });
+            await _userRefreshTokenService.AddAsync(new UserRefreshToken { UserId = user.Id, RefreshToken = token.RefreshToken, ExpirationDate = token.RefreshTokenExpirationDate});
         }
         else
         {
-            userRefreshToken.RefreshToken=token.RefreshToken;
+            userRefreshToken.RefreshToken = token.RefreshToken;
             userRefreshToken.ExpirationDate = token.RefreshTokenExpirationDate;
-
         }
 
         await _unitOfWork.CommitAsync();
 
-        return Response<TokenDto>.Success(200);
-
+        return Response<TokenDto>.Success(token, 200);
     }
+
 
     public Response<ClientTokenDto> CreateTokenByClient(ClientLoginDto clientLoginDto)
     {

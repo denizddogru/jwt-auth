@@ -1,30 +1,25 @@
-﻿namespace SharedLibrary.Dtos;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-// Tüm API'larda hata yakalanan kısım burası olacak
-public class ErrorDto
+namespace SharedLibrary.Dtos
 {
-
-    // Private set: Özelliğin sadece sınıfın iççinden ayarlanabilmesini sağlar.
-    public List<string> Errors { get; private set; }
-
-    public bool IsShow { get; private set; }
-
-
-    public ErrorDto()
+    public class ErrorDto
     {
-        Errors = new List<string>();
-    }
+        public List<String> Errors { get; private set; } = new List<string>();
 
-    public ErrorDto(string error, bool isShow)
-    {
-        Errors.Add(error);
-        isShow = true;
-    }
+        public bool IsShow { get; private set; }
 
-    public ErrorDto(List<string> errors, bool isShow)
-    {
-        Errors = Errors;
-        IsShow = isShow;
-    }
+        public ErrorDto(string error, bool isShow)
+        {
+            Errors.Add(error);
+            IsShow = isShow;
+        }
 
+        public ErrorDto(List<string> errors, bool isShow)
+        {
+            Errors = errors;
+            IsShow = isShow;
+        }
+    }
 }
