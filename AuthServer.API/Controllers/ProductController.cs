@@ -39,7 +39,9 @@ public class ProductController : CustomBaseController
         return ActionResultInstance(await _productService.Update(productDto, productDto.Id));
     }
 
-    [HttpDelete]
+    // api/product/2 dersek buradaki 2 annotationdaki 2 ye karşılık gelicek
+    // eğer bunu vermsesydik query stringden almak gerekirdi
+    [HttpDelete("{id}")]
 
     public async Task<IActionResult> RemoveProduct(int id)
     {

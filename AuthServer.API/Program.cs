@@ -5,10 +5,11 @@ using AuthServer.Core.Services;
 using AuthServer.Core.UnitOfWork;
 using AuthServer.Data;
 using AuthServer.Service.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Configurations;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using SharedLibrary.Services;
 
 internal class Program
 {
