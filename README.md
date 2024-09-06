@@ -41,7 +41,7 @@ After cloning this project, if you cannot make requests using Postman, follow th
 - In Visual Studio:
   1. Delete the existing **Migrations** folder in the project.
   2. Go to **Tools** -> **Package Manager Console**.
-  3. In the pop-up screen, from **Default Project**: select `NLayer-Repository`.
+  3. In the screen that opened below in Visual Studio , from **Default Project** tab above: select `NLayer-Repository`.
   4. Run the following commands:
      
      ```bash
