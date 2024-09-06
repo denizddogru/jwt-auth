@@ -36,6 +36,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseAuthentication();
 
 // Map the controllers to routes
 app.MapControllers();
