@@ -48,7 +48,7 @@ After cloning this project, if you cannot make requests using Postman, follow th
      Add-Migration InitialMigration
      ```
 
-     - If successful, the **Migrations** folder will be recreated in the repository folder.
+     - If successful, the **Migrations** folder and Up-Down methods will be recreated.
   
   5. Run the following command to update the database:
   
@@ -56,7 +56,7 @@ After cloning this project, if you cannot make requests using Postman, follow th
      Update-Database
      ```
 
-     - This will generate the `Up` and `Down` methods in the migration.
+     - This command will apply the migrations to the database executing the Up method accordingly.
 
 ---
 
