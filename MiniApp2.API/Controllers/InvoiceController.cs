@@ -9,6 +9,9 @@ namespace MiniApp1.API.Controllers;
 [ApiController]
 public class Invoice : ControllerBase
 {
+
+    [HttpGet]
+
     public IActionResult GetInvoices()
     {
 
@@ -18,10 +21,10 @@ public class Invoice : ControllerBase
 
         // veri tabanında Id alanına ait istediğimiz bilgiyi alabiliriz artık.
 
-        var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+        var userIdClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
 
 
-        return Ok($"Invoice Operations => Username: {userName} - UserId: {userId}");
+        return Ok($"Invoice Operations => Username: {userName} - UserId: {userIdClaim.Value}");
 
     }
 }

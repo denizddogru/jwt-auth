@@ -9,6 +9,8 @@ namespace MiniApp1.API.Controllers;
 [ApiController]
 public class StockController : ControllerBase
 {
+
+    [HttpGet]
     public IActionResult GetStock()
     {
 
@@ -18,10 +20,10 @@ public class StockController : ControllerBase
 
         // veri tabanında Id alanına ait istediğimiz bilgiyi alabiliriz artık.
 
-        var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+        var userIdClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
 
 
-        return Ok($"Stock Operations => Username: {userName} - UserId: {userId}");
+        return Ok($"Stock Operations => Username: {userName} - UserId: {userIdClaim.Value}");
 
     }
 }
