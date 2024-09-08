@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Configurations;
 using SharedLibrary.Services;
+using SharedLibrary.Extensions;
 
 internal class Program
 {
@@ -115,6 +116,10 @@ internal class Program
 
         builder.Services.AddFluentValidationAutoValidation();
         builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+
+        // Fluent validation'dan gelen otomatik hata mesajlarýný ezdik, kendi validation response'ýmýzý kulladýk. ( Shared Library )
+
+        builder.Services.UseCustomValidationResponse();
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
