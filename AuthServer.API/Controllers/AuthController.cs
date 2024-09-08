@@ -37,7 +37,7 @@ public class AuthController : CustomBaseController
 
     // 1.Adım ClientLoginDto ile bir ClientId ve ClientSecret parametresi istiyoruz. ( Auth serverımızın kabul edeceği parametreleri appsettings'de tanımladık.)
     // 2.Adım AuthServer'dan Token almak için istek atıyoruz. ( Attığımız istek başarılıysa dönen Token'ı jwt.io'ya yapıştırdığımız zaman Issuer ve Audience'ı görebiliriz. ( Issuer Token'ı veren AuthServer, 
-    //                                                                                                                                                                        Audience: Token'ın erişimi olan API'lar ( miniApi2 )
+    //                                                                                                                                  -                                      Audience: Token'ın erişimi olan API'lar ( miniApi2 )
     // 3. Aldığımız bu token bilgisini gidip miniAPI2'nin GetInvoice metoduna istek atmak için kullandık. 
     public IActionResult CreateTokenByClient(ClientLoginDto clientLoginDto)
     {
