@@ -2,6 +2,7 @@
 using AuthServer.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SharedLibrary.Exceptions;
 
 namespace AuthServer.API.Controllers;
 
@@ -20,6 +21,7 @@ public class UserController : CustomBaseController
     [HttpPost]
     public async Task<IActionResult> CreateUser(CreateUserDto createUserDto)
     {
+        throw new CustomExceptions("Veri tabanı ile ilgili bir hata meydana geldi.");
         return ActionResultInstance(await _userService.CreateUserAsync(createUserDto)); 
     }
 

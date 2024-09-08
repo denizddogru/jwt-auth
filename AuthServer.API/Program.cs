@@ -134,6 +134,11 @@ internal class Program
             app.UseSwaggerUI();
         }
 
+        else
+        {
+        }
+
+        app.UseCustomException();
         app.UseHttpsRedirection();
         app.UseAuthentication();
         app.UseAuthorization();
